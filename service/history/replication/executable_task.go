@@ -803,6 +803,10 @@ func (e *ExecutableTaskImpl) GetNamespaceInfo(
 	namespaceEntry, err := e.NamespaceCache.GetNamespaceByID(namespace.ID(namespaceID))
 	switch err.(type) {
 	case nil:
+		if !namespaceEntry.IsGlobalNamespace() {
+			e.namespace.Store(namespaceEntry.Name())
+			return namespaceEntry.Name().String(), false, nil
+		}
 		if e.replicationTask.VersionedTransition != nil && e.replicationTask.VersionedTransition.NamespaceFailoverVersion > namespaceEntry.FailoverVersion(businessID) {
 			_, err = e.ProcessToolBox.EagerNamespaceRefresher.SyncNamespaceFromSourceCluster(ctx, namespace.ID(namespaceID), e.sourceClusterName)
 			if err != nil {
