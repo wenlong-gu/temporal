@@ -53,6 +53,7 @@ type Config struct {
 	BreakdownMetricsByTaskQueue               dynamicconfig.TypedPropertyFnWithTaskQueueFilter[bool]
 	EnableCallbacks                           dynamicconfig.BoolPropertyFnWithNamespaceFilter
 	Enabled                                   dynamicconfig.BoolPropertyFnWithNamespaceFilter
+	EnablePrincipalPropagation                dynamicconfig.BoolPropertyFnWithNamespaceFilter
 	EnableStandaloneActivityOperatorCommands  dynamicconfig.BoolPropertyFnWithNamespaceFilter
 	LongPollBuffer                            dynamicconfig.DurationPropertyFnWithNamespaceFilter
 	LongPollTimeout                           dynamicconfig.DurationPropertyFnWithNamespaceFilter
@@ -74,6 +75,7 @@ func ConfigProvider(dc *dynamicconfig.Collection) *Config {
 		DefaultActivityRetryPolicy:                dynamicconfig.DefaultActivityRetryPolicy.Get(dc),
 		EnableCallbacks:                           EnableCallbacks.Get(dc),
 		Enabled:                                   Enabled.Get(dc),
+		EnablePrincipalPropagation:                dynamicconfig.EnablePrincipalPropagation.Get(dc),
 		EnableStandaloneActivityOperatorCommands:  EnableStandaloneActivityOperatorCommands.Get(dc),
 		LongPollBuffer:                            LongPollBuffer.Get(dc),
 		LongPollTimeout:                           LongPollTimeout.Get(dc),
