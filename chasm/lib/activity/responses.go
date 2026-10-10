@@ -124,6 +124,7 @@ func (a *Activity) buildActivityExecutionInfo(
 		LastHeartbeatTime:       heartbeat.GetRecordedTime(),
 		LastStartedTime:         attempt.GetStartedTime(),
 		LastWorkerIdentity:      attempt.GetLastWorkerIdentity(),
+		LastWorkerPrincipal:     attempt.GetLastWorkerPrincipal(),
 		LastDeploymentVersion:   attempt.GetLastDeploymentVersion(),
 		SdkName:                 attempt.GetSdkName(),
 		SdkVersion:              attempt.GetSdkVersion(),

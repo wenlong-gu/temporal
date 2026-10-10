@@ -126,7 +126,7 @@ func (s *standaloneActivityTestSuite) newTestEnv(opts ...testcore.TestOption) *s
 	return env
 }
 
-func (s *standaloneActivityTestSuite) TestLastWorkerPrincipalIsPersisted() {
+func (s *standaloneActivityTestSuite) TestLastWorkerPrincipalIsPersistedAndExposed() {
 	const (
 		principalType = "jwt"
 		principalName = "worker-subject"
@@ -167,6 +167,17 @@ func (s *standaloneActivityTestSuite) TestLastWorkerPrincipalIsPersisted() {
 		Identity:  defaultIdentity,
 	})
 	require.NoError(t, err)
+
+	describeResp, err := env.FrontendClient().DescribeActivityExecution(s.Context(), &workflowservice.DescribeActivityExecutionRequest{
+		Namespace:  env.Namespace().String(),
+		ActivityId: activityID,
+		RunId:      startResp.RunId,
+	})
+	require.NoError(t, err)
+	protorequire.ProtoEqual(t, &commonpb.Principal{
+		Type: principalType,
+		Name: principalName,
+	}, describeResp.GetInfo().GetLastWorkerPrincipal())
 
 	shardID := common.WorkflowIDToHistoryShard(
 		env.NamespaceID().String(),
